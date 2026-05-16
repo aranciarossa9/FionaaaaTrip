@@ -19,8 +19,9 @@
 <div class="container">
 
   <div class="top-actions" style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.2rem;">
-    <button class="btn btn-ghost" id="showAllBtn" onclick="showAllDestinations()">🌍 Visualizza tutte le destinazioni</button>
+    <button class="btn btn-ghost" id="showAllBtn" onclick="showAllDestinations()">🌍 Clicca per la lista con tutte le destinazioni proposte</button>
     <button class="btn btn-ghost hidden" id="showFormBtn" onclick="showForm()">← Torna al modulo</button>
+    <button class="btn btn-ghost" id="themeToggle" onclick="toggleTheme()">🎨 Tema: <span id="themeLabel">Classico</span></button>
   </div>
 
   <!-- ─ SCHERMATA GIÀ INVIATO ─ -->
@@ -112,6 +113,26 @@
 <script>
 /* ── STATO GLOBALE ── */
 let userDestinations = [];
+
+/* ── THEME (classico / psichedelico) ── */
+function applyTheme(t) {
+  const isPsy = (t === 'psychedelic');
+  document.body.classList.toggle('psychedelic', isPsy);
+  const label = document.getElementById('themeLabel');
+  if (label) label.textContent = isPsy ? 'Pazzo' : 'Classico';
+  try { localStorage.setItem('theme', t); } catch (e) { /* ignore */ }
+}
+
+function toggleTheme() {
+  const cur = localStorage.getItem('theme') || 'classic';
+  const next = (cur === 'psychedelic') ? 'classic' : 'psychedelic';
+  applyTheme(next);
+}
+
+function initTheme() {
+  const t = localStorage.getItem('theme') || 'classic';
+  applyTheme(t);
+}
 
 /* ── API helpers ── */
 async function apiFetch() {
@@ -329,6 +350,8 @@ setInterval(() => {
 }, 3000);
 
 /* ── Init ── */
+// Inizializza tema e dati
+initTheme();
 if (!checkAlreadySubmitted()) {
   loadAllDestinations();
 }

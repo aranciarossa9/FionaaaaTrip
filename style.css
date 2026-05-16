@@ -568,3 +568,50 @@ select option { background: #1a1a2e; color: var(--text); }
   .slot       { padding: 0.6rem 0.5rem; }
   .slot-value { font-size: 0.72rem; }
 }
+
+/* ─── PSICHEDÉLIC THEME ───────────────── */
+body.psychedelic {
+  background: radial-gradient(circle at 10% 10%, #ffb3c1 0%, transparent 20%),
+              radial-gradient(circle at 90% 80%, #a8ffeb 0%, transparent 25%),
+              conic-gradient(from 120deg at 50% 50%, #ff4d94, #7c5cfc, #00e5ff, #ffd60a, #ff4d94);
+  background-blend-mode: screen, screen, overlay;
+  color: #070707;
+}
+
+body.psychedelic::after { display:none; }
+body.psychedelic::before { opacity:0.06; }
+
+body.psychedelic .card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+  border: 2px dashed rgba(255,255,255,0.25);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 40px rgba(124,92,252,0.08) inset;
+  transform: perspective(600px) rotateX(2deg);
+}
+
+body.psychedelic .header-badge { background: linear-gradient(90deg,#ffb3c1,#ffd60a); color:#000; border:none; }
+body.psychedelic .section-title { background: linear-gradient(90deg,#7C5CFC,#FF4D94); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.psychedelic .btn-ghost { background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); color:#070707; border: 1px solid rgba(0,0,0,0.08); }
+body.psychedelic .btn-primary { background: linear-gradient(45deg,#00e5ff,#7C5CFC,#FFD60A); color:#070707; box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+
+body.psychedelic input[type="text"], body.psychedelic textarea, body.psychedelic select {
+  background: rgba(255,255,255,0.9);
+  color: #070707;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+body.psychedelic .dest-block { border-radius: 14px; background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.15)); }
+
+body.psychedelic .chip-done { background: linear-gradient(90deg,#39D98A,#00E5FF); color:#06121a; border:none; }
+
+@keyframes pulseColors {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(60deg); }
+  100% { filter: hue-rotate(0deg); }
+}
+
+body.psychedelic .card { animation: pulseColors 6s ease-in-out infinite; }
+
+/* Make long lists readable: compact cards and subtle separators */
+body.psychedelic #allDestinationsList > div { padding: 0.9rem; margin-bottom:0.6rem; border-radius:12px; }
+
