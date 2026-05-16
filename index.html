@@ -162,7 +162,7 @@ function updateVotingCountdown() {
   
   if (remaining > 0) {
     countdownText.textContent = formatCountdown(remaining);
-    countdownMessage.textContent = `Le votazioni apriranno il ${startDate.toLocaleString('it-IT', { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' })}.`;
+    countdownMessage.textContent = `Le votazioni apriranno ${startDate.toLocaleString('it-IT', { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' })}.`;
   } else {
     countdownText.textContent = 'Votazioni aperte!';
     countdownMessage.textContent = 'Vai alla pagina di voto per partecipare ora.';
