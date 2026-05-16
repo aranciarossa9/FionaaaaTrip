@@ -826,10 +826,12 @@ body.psychedelic .btn { transform: none; }
 body.psychedelic .btn:hover { transform: none; }
 
 body.psychedelic .subtitle {
+  display: inline-block;
   color: transparent;
   text-shadow: 0 0 10px rgba(255,255,255,0.4);
   position: static;
   background: linear-gradient(90deg, #ff4d94, #7C5CFC, #00E5FF, #FFD60A, #39D98A);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
