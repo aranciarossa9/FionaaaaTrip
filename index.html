@@ -13,7 +13,7 @@
     <span>✈️</span> Ottobre / Novembre 2025
   </div>
   <h1>FIONAAAAA's<br>TRIP</h1>
-  <p class="subtitle">Proponi le 3 mete del tuo cuore 🗺️</p>
+  <p class="subtitle">Proponi tutte le mete che vuoi 🗺️</p>
 </header>
 
 <div class="container">
@@ -40,47 +40,20 @@
 
     <div class="card fade-in" style="animation-delay:0.06s">
       <div class="section-label">Le tue proposte</div>
-      <div class="section-title">📍 Le 3 mete</div>
+      <div class="section-title">📍 Aggiungi mete</div>
       <p class="muted" style="font-size:0.85rem; margin-bottom:1.4rem">
-        Proponi in ordine di preferenza: la prima vale <strong style="color:var(--yellow)">3 punti</strong>, la seconda <strong style="color:var(--pink)">2 punti</strong>, la terza <strong style="color:var(--purple)">1 punto</strong>.
+        Proponi tutte le mete che vuoi. Ogni meta ha: Destinazione, Periodo e Note.
       </p>
 
-      <!-- Meta 1 -->
+      <!-- Form per aggiungere una singola meta -->
       <div class="dest-block">
-        <div class="rank-pill rank-1">🥇 1ª meta &mdash; 3 punti</div>
         <div class="form-group">
           <label>Città / Destinazione</label>
-          <input type="text" id="city1" placeholder="es. Barcellona, Lisbona, Praga…" autocomplete="off">
+          <input type="text" id="newCity" placeholder="es. Barcellona, Lisbona, Praga…" autocomplete="off">
         </div>
         <div class="form-group">
           <label>Periodo preferito</label>
-          <select id="period1">
-            <option value="">Seleziona periodo…</option>
-            <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
-            <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
-            <option value="Fine ottobre (21–31 ott)">Fine ottobre (21–31 ott)</option>
-            <option value="Inizio novembre (1–10 nov)">Inizio novembre (1–10 nov)</option>
-            <option value="Metà novembre (11–20 nov)">Metà novembre (11–20 nov)</option>
-            <option value="Fine novembre (21–30 nov)">Fine novembre (21–30 nov)</option>
-            <option value="Flessibile ottobre/novembre">Flessibile ottobre/novembre</option>
-          </select>
-        </div>
-        <div class="form-group mb-0">
-          <label>Perché ci vuoi andare? Convicici!</label>
-          <textarea id="notes1" rows="2" placeholder="Clima perfetto, vita notturna assurda, voli a 30€…"></textarea>
-        </div>
-      </div>
-
-      <!-- Meta 2 -->
-      <div class="dest-block">
-        <div class="rank-pill rank-2">🥈 2ª meta &mdash; 2 punti</div>
-        <div class="form-group">
-          <label>Città / Destinazione</label>
-          <input type="text" id="city2" placeholder="es. Amsterdam, Berlino, Istanbul…" autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label>Periodo preferito</label>
-          <select id="period2">
+          <select id="newPeriod">
             <option value="">Seleziona periodo…</option>
             <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
             <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
@@ -93,46 +66,30 @@
         </div>
         <div class="form-group mb-0">
           <label>Perché ci vuoi andare?</label>
-          <textarea id="notes2" rows="2" placeholder="Convincici ancora…"></textarea>
+          <textarea id="newNotes" rows="2" placeholder="Perché questa meta è fantastica…"></textarea>
         </div>
       </div>
 
-      <!-- Meta 3 -->
-      <div class="dest-block">
-        <div class="rank-pill rank-3">🥉 3ª meta &mdash; 1 punto</div>
-        <div class="form-group">
-          <label>Città / Destinazione</label>
-          <input type="text" id="city3" placeholder="es. Vienna, Porto, Dubrovnik…" autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label>Periodo preferito</label>
-          <select id="period3">
-            <option value="">Seleziona periodo…</option>
-            <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
-            <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
-            <option value="Fine ottobre (21–31 ott)">Fine ottobre (21–31 ott)</option>
-            <option value="Inizio novembre (1–10 nov)">Inizio novembre (1–10 nov)</option>
-            <option value="Metà novembre (11–20 nov)">Metà novembre (11–20 nov)</option>
-            <option value="Fine novembre (21–30 nov)">Fine novembre (21–30 nov)</option>
-            <option value="Flessibile ottobre/novembre">Flessibile ottobre/novembre</option>
-          </select>
-        </div>
-        <div class="form-group mb-0">
-          <label>Perché ci vuoi andare?</label>
-          <textarea id="notes3" rows="2" placeholder="Ultima chance, convinci il gruppo!"></textarea>
-        </div>
+      <button class="btn btn-primary btn-full" id="addBtn" onclick="addDestination()">
+        ➕ Aggiungi meta
+      </button>
+
+      <!-- Lista mete aggiunte dall'utente -->
+      <div id="userDestinationsContainer" style="margin-top:1.8rem; display:none;">
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:0.8rem; text-transform:uppercase; letter-spacing:0.05em;">Le tue mete aggiunte</div>
+        <div id="userDestinationsList"></div>
       </div>
 
-      <button class="btn btn-primary btn-full" id="submitBtn" onclick="submitProposal()">
+      <button class="btn btn-primary btn-full" id="submitBtn" onclick="submitProposal()" style="margin-top:1.4rem">
         🚀 Invia le mie proposte
       </button>
     </div>
 
-    <!-- Chi ha già proposto -->
-    <div class="card fade-in" id="submittedCard" style="animation-delay:0.12s">
-      <div class="section-label">Progressi</div>
-      <div class="section-title">👥 Chi ha già proposto</div>
-      <div id="submittedList" class="chip-list">
+    <!-- Lista comune di tutte le mete proposte -->
+    <div class="card fade-in" id="allDestinationsCard" style="animation-delay:0.12s">
+      <div class="section-label">Mete proposte</div>
+      <div class="section-title">🌍 Tutte le destinazioni</div>
+      <div id="allDestinationsList">
         <span class="spinner"></span>
       </div>
     </div>
@@ -145,6 +102,9 @@
 
 <script src="config.js"></script>
 <script>
+/* ── STATO GLOBALE ── */
+let userDestinations = [];
+
 /* ── API helpers ── */
 async function apiFetch() {
   const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
@@ -182,41 +142,111 @@ function checkAlreadySubmitted() {
   return false;
 }
 
-/* ── Carica lista di chi ha già proposto ── */
-async function loadSubmitters() {
+/* ── Aggiungi una destinazione alla lista temporanea ── */
+function addDestination() {
+  const city = document.getElementById('newCity').value.trim();
+  const period = document.getElementById('newPeriod').value;
+  const notes = document.getElementById('newNotes').value.trim();
+
+  if (!city || !period) {
+    return toast('⚠️ Completa Destinazione e Periodo!', 'err');
+  }
+
+  userDestinations.push({ city, period, notes });
+  
+  // Pulisci form
+  document.getElementById('newCity').value = '';
+  document.getElementById('newPeriod').value = '';
+  document.getElementById('newNotes').value = '';
+  
+  renderUserDestinations();
+  toast('✅ Meta aggiunta!', 'ok');
+}
+
+/* ── Rimuovi una destinazione dalla lista ── */
+function removeDestination(index) {
+  userDestinations.splice(index, 1);
+  renderUserDestinations();
+  toast('🗑️ Meta rimossa', 'ok');
+}
+
+/* ── Render lista mete utente ── */
+function renderUserDestinations() {
+  const container = document.getElementById('userDestinationsContainer');
+  const list = document.getElementById('userDestinationsList');
+  
+  if (userDestinations.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'block';
+  list.innerHTML = userDestinations.map((dest, idx) => `
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1rem; margin-bottom:0.8rem;">
+      <div style="display:flex; justify-content:space-between; align-items:start; gap:1rem;">
+        <div style="flex:1;">
+          <div style="font-weight:600; margin-bottom:0.3rem;">${dest.city}</div>
+          <div style="font-size:0.85rem; color:var(--muted); margin-bottom:0.4rem;">📅 ${dest.period}</div>
+          ${dest.notes ? `<div style="font-size:0.85rem; color:var(--dimmed); font-style:italic;">"${dest.notes}"</div>` : ''}
+        </div>
+        <button onclick="removeDestination(${idx})" style="background:rgba(255,77,77,0.2); border:1px solid rgba(255,77,77,0.4); color:#FF4D4D; border-radius:8px; padding:0.4rem 0.8rem; cursor:pointer; font-size:0.75rem; white-space:nowrap;">✕ Rimuovi</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── Carica e mostra tutte le mete di tutti ── */
+async function loadAllDestinations() {
   try {
     const data = await apiFetch();
-    const list = document.getElementById('submittedList');
+    const list = document.getElementById('allDestinationsList');
+    
     if (!data.proposals?.length) {
-      list.innerHTML = '<span class="muted" style="font-size:0.85rem">Nessuno ancora… sii il primo! 🙌</span>';
+      list.innerHTML = '<span class="muted" style="font-size:0.85rem">Nessuna meta proposta ancora… sii il primo! 🙌</span>';
       return;
     }
-    list.innerHTML = data.proposals
-      .map(p => `<span class="chip chip-done">✓ ${p.author}</span>`)
-      .join('');
-  } catch {
-    document.getElementById('submittedList').innerHTML =
-      '<span class="muted" style="font-size:0.82rem">⚠️ Impossibile caricare. Controlla la connessione.</span>';
+    
+    // Raccogli tutte le mete di tutti
+    let allDests = [];
+    data.proposals.forEach(proposal => {
+      proposal.destinations.forEach(dest => {
+        allDests.push({
+          ...dest,
+          author: proposal.author
+        });
+      });
+    });
+    
+    if (allDests.length === 0) {
+      list.innerHTML = '<span class="muted" style="font-size:0.85rem">Nessuna meta proposta ancora… sii il primo! 🙌</span>';
+      return;
+    }
+    
+    list.innerHTML = allDests.map(dest => `
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.2rem; margin-bottom:0.8rem;">
+        <div style="display:flex; justify-content:space-between; align-items:start; gap:1rem; margin-bottom:0.8rem;">
+          <div>
+            <div style="font-weight:600; font-size:1.1rem; margin-bottom:0.2rem;">${dest.city}</div>
+            <div style="font-size:0.8rem; color:var(--muted);">proposta da <strong>${dest.author}</strong></div>
+          </div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--muted); margin-bottom:0.4rem;">📅 ${dest.period}</div>
+        ${dest.notes ? `<div style="font-size:0.85rem; color:var(--dimmed); font-style:italic; padding:0.6rem; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid var(--cyan);">${dest.notes}</div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) {
+    console.error(e);
+    document.getElementById('allDestinationsList').innerHTML =
+      '<span class="muted" style="font-size:0.82rem">⚠️ Errore nel caricamento. Controlla la connessione.</span>';
   }
 }
 
-/* ── Submit proposta ── */
+/* ── Submit proposte ── */
 async function submitProposal() {
-  const name  = document.getElementById('authorName').value.trim();
-  const city1 = document.getElementById('city1').value.trim();
-  const per1  = document.getElementById('period1').value;
-  const not1  = document.getElementById('notes1').value.trim();
-  const city2 = document.getElementById('city2').value.trim();
-  const per2  = document.getElementById('period2').value;
-  const not2  = document.getElementById('notes2').value.trim();
-  const city3 = document.getElementById('city3').value.trim();
-  const per3  = document.getElementById('period3').value;
-  const not3  = document.getElementById('notes3').value.trim();
+  const name = document.getElementById('authorName').value.trim();
 
-  if (!name)           return toast('⚠️ Inserisci il tuo nome!', 'err');
-  if (!city1 || !per1) return toast('⚠️ Completa la 1ª meta (città + periodo)!', 'err');
-  if (!city2 || !per2) return toast('⚠️ Completa la 2ª meta (città + periodo)!', 'err');
-  if (!city3 || !per3) return toast('⚠️ Completa la 3ª meta (città + periodo)!', 'err');
+  if (!name) return toast('⚠️ Inserisci il tuo nome!', 'err');
+  if (userDestinations.length === 0) return toast('⚠️ Aggiungi almeno una meta!', 'err');
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
@@ -225,9 +255,9 @@ async function submitProposal() {
   try {
     const data = await apiFetch();
     if (!data.proposals) data.proposals = [];
-    if (!data.votes)     data.votes     = [];
+    if (!data.votes) data.votes = [];
 
-    // Controlla nome duplicato lato server
+    // Controlla nome duplicato
     if (data.proposals.some(p => p.author.toLowerCase() === name.toLowerCase())) {
       toast('⚠️ Qualcuno con questo nome ha già proposto!', 'err');
       btn.disabled = false;
@@ -237,19 +267,16 @@ async function submitProposal() {
       return;
     }
 
+    // Salva le proposte
     data.proposals.push({
       author: name,
       timestamp: new Date().toISOString(),
-      destinations: [
-        { city: city1, period: per1, notes: not1 },
-        { city: city2, period: per2, notes: not2 },
-        { city: city3, period: per3, notes: not3 }
-      ]
+      destinations: userDestinations
     });
 
     await apiSave(data);
     localStorage.setItem('fionaProposed', '1');
-    toast('✅ Proposte inviate! Ora vai a votare!', 'ok');
+    toast('✅ Proposte inviate! Grazie!', 'ok');
 
     setTimeout(() => {
       document.getElementById('formSection').classList.add('hidden');
@@ -264,9 +291,16 @@ async function submitProposal() {
   }
 }
 
+/* ── Carica mete ogni 3 secondi ── */
+setInterval(() => {
+  if (!checkAlreadySubmitted()) {
+    loadAllDestinations();
+  }
+}, 3000);
+
 /* ── Init ── */
 if (!checkAlreadySubmitted()) {
-  loadSubmitters();
+  loadAllDestinations();
 }
 </script>
 </body>
