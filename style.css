@@ -676,7 +676,6 @@ body.psychedelic .section-title {
   background: linear-gradient(90deg,#7C5CFC,#FF4D94);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation: titlePulse 3.5s ease-in-out infinite;
 }
 
 body.psychedelic .btn-ghost { background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); color:#070707; border: 1px solid rgba(0,0,0,0.08); }
@@ -698,16 +697,10 @@ body.psychedelic .chip-done { background: linear-gradient(90deg,#39D98A,#00E5FF)
   100% { filter: hue-rotate(0deg); }
 }
 
-body.psychedelic .card { animation: pulseColors 6s ease-in-out infinite; }
-
 /* Make long lists readable: compact cards and subtle separators */
 body.psychedelic #allDestinationsList > div { padding: 0.9rem; margin-bottom:0.6rem; border-radius:12px; }
 
 /* ─── PSICHEDELIC EXTREME OVERRIDES ───────────────── */
-body.psychedelic {
-  animation: hueShift 12s linear infinite;
-}
-
 @keyframes hueShift {
   0% { filter: hue-rotate(0deg) saturate(120%); }
   25% { filter: hue-rotate(90deg) saturate(160%); }
