@@ -569,6 +569,52 @@ select option { background: #1a1a2e; color: var(--text); }
   .slot-value { font-size: 0.72rem; }
 }
 
+@media (max-width: 768px) {
+  body.psychedelic {
+    animation: none !important;
+  }
+  body.psychedelic::before,
+  body.psychedelic::after {
+    display: none !important;
+  }
+  body.psychedelic .card {
+    animation: none !important;
+    transform: none !important;
+  }
+  body.psychedelic .header h1::before,
+  body.psychedelic .header h1::after {
+    display: none !important;
+  }
+  body.psychedelic .header h1 {
+    text-shadow: 0 0 14px rgba(255,255,255,0.9);
+    animation: wobble 5s ease-in-out infinite;
+  }
+  body.psychedelic .section-title {
+    animation: titlePulse 4s ease-in-out infinite;
+  }
+  body.psychedelic .subtitle::after {
+    animation: subtitleShift 10s ease-in-out infinite;
+  }
+  body.psychedelic .btn:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.psychedelic,
+  body.psychedelic .card,
+  body.psychedelic .header h1,
+  body.psychedelic .btn:hover {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  body.psychedelic .header h1::before,
+  body.psychedelic .header h1::after {
+    display: none !important;
+  }
+}
+
 /* ─── PSICHEDÉLIC THEME ───────────────── */
 body.psychedelic {
   background: radial-gradient(circle at 10% 10%, #ffb3c1 0%, transparent 20%),
@@ -717,7 +763,7 @@ body.psychedelic .subtitle {
   position: relative;
 }
 body.psychedelic .subtitle::after {
-  content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE";
+  content: "SPETTTACOLIIISSSIMO";
   display: block;
   margin-top: 0.75rem;
   font-size: 0.98rem;
@@ -730,11 +776,11 @@ body.psychedelic .subtitle::after {
   animation: subtitleShift 8s ease-in-out infinite;
 }
 @keyframes subtitleShift {
-  0% { content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE"; transform: translateX(0); }
-  25% { content: "ATTENZIONE: SCHERMO IPNOTICO ATTIVO"; transform: translateX(-6px); }
-  50% { content: "FOLLIA CONTROLLATA? SPESSO NO."; transform: translateX(4px); }
+  0% { content: "SPETTTACOLIIISSSIMO"; transform: translateX(0); }
+  25% { content: "EEEE ZO DE VODKA LEMOOOON"; transform: translateX(-6px); }
+  50% { content: "VUTU UN FIA DE PASTA??!!."; transform: translateX(4px); }
   75% { content: "NON LEGGERE TROPPO VELOCE"; transform: translateX(-4px); }
-  100% { content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE"; transform: translateX(0); }
+  100% { content: "SIAMMMMESSI ??"; transform: translateX(0); }
 }
 
 @keyframes titlePulse {
