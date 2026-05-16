@@ -313,7 +313,7 @@ function closePsyModal(choice) {
   if (choice === 'yes') {
     toast('✅ SI! Torna al tema classico per inserire.', 'ok');
   } else {
-    toast('🟠 SI ma... rimani in meme mode.', 'info');
+    toast('🟠 SI ma in arancione... rimani in meme mode.', 'info');
   }
 }
 
@@ -409,9 +409,7 @@ async function loadAllDestinations() {
 
 /* ── Submit proposte ── */
 async function submitProposal() {
-  const name = document.getElementById('authorName').value.trim();
-
-  if (!name) return toast('⚠️ Inserisci il tuo nome!', 'err');
+  const name = document.getElementById('authorName').value.trim() || 'Anonimo';
   if (userDestinations.length === 0) return toast('⚠️ Aggiungi almeno una meta!', 'err');
 
   const btn = document.getElementById('submitBtn');
@@ -422,16 +420,6 @@ async function submitProposal() {
     const data = await apiFetch();
     if (!data.proposals) data.proposals = [];
     if (!data.votes) data.votes = [];
-
-    // Controlla nome duplicato
-    if (data.proposals.some(p => p.author.toLowerCase() === name.toLowerCase())) {
-      toast('⚠️ Qualcuno con questo nome ha già proposto!', 'err');
-      btn.disabled = false;
-      btn.innerHTML = '🚀 Invia le mie proposte';
-      localStorage.setItem('fionaProposed', '1');
-      checkAlreadySubmitted();
-      return;
-    }
 
     // Salva le proposte
     data.proposals.push({
