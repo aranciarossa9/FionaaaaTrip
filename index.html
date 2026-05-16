@@ -13,7 +13,7 @@
     <span>✈️</span> Ottobre / Novembre 2025
   </div>
   <h1 data-text="FIONAAAA's TRIP">FIONAAAA's<br>TRIP</h1>
-  <p class="subtitle">Proponi tutte le mete che vuoi 🗺️</p>
+  <p class="subtitle">Proponi le mete che preferisci🗺️</p>
 </header>
 
 <div class="container">
@@ -37,7 +37,7 @@
     <div style="font-size:3rem; margin-bottom:0.8rem">🎉</div>
     <div class="section-title">Proposte inviate!</div>
     <p class="muted" style="font-size:0.9rem; margin-bottom:1.4rem">
-      Le tue mete sono state salvate con successo! 🎯
+      Le tue proposte sono state salvate con successo! 🎯
     </p>
   </div>
 
@@ -56,7 +56,7 @@
       <div class="section-label">Le tue proposte</div>
       <div class="section-title">📍 Aggiungi mete</div>
       <p class="muted" style="font-size:0.85rem; margin-bottom:1.4rem">
-        Proponi tutte le mete che vuoi. Ogni meta ha: Destinazione, Periodo e Note.
+        Inserisci le tue proposte. Destinazione, Periodo e Note.
       </p>
 
       <!-- Form per aggiungere una singola meta -->
@@ -79,7 +79,7 @@
           </select>
         </div>
         <div class="form-group mb-0">
-          <label>Perché ci vuoi andare?</label>
+          <label>Motiva la tua proposta</label>
           <textarea id="newNotes" rows="2" placeholder="Motiva la proposta…"></textarea>
         </div>
       </div>
@@ -379,7 +379,7 @@ function closePsyModal(choice) {
   if (choice === 'yes') {
     toast('✅ SI! Torna al tema classico per inserire.', 'ok');
   } else {
-    toast('🟠 SI ma in arancione... rimani in meme mode.', 'info');
+    toast('🟠 SI ma in arancione... .', 'info');
   }
 }
 
@@ -473,7 +473,7 @@ async function loadAllDestinations() {
             ${dest.comments.map(c => `<div style="font-size:0.83rem; color:var(--dimmed); margin-bottom:0.5rem;">💬 <strong>${c.author || 'Anonimo'}:</strong> ${c.text}</div>`).join('')}
           </div>` : ''}
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:flex-end; margin-top:0.85rem;">
-          <input id="commentInput_${dest.id}" type="text" placeholder="Aggiungi una nota a questa destinazione…" style="flex:1; min-width:180px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.85rem 1rem; color:var(--text);" />
+          <input id="commentInput_${dest.id}" type="text" placeholder="Aggiungi motivazione…" style="flex:1; min-width:180px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.85rem 1rem; color:var(--text);" />
           <button class="btn btn-ghost" onclick='submitDestinationComment(${dest.proposalIndex}, ${dest.destIndex}, ${JSON.stringify(dest.id)})'>✍️ Commenta</button>
         </div>
       </div>
@@ -562,6 +562,10 @@ async function submitProposal() {
 /* ── Carica mete ogni 3 secondi ── */
 setInterval(() => {
   if (!checkAlreadySubmitted()) {
+    const active = document.activeElement;
+    if (active && active.matches && active.matches('input[id^="commentInput_"]')) {
+      return;
+    }
     loadAllDestinations();
   }
 }, 3000);
