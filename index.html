@@ -38,9 +38,6 @@
     <p class="muted" style="font-size:0.9rem; margin-bottom:1.4rem">
       Le tue mete sono state salvate con successo! 🎯
     </p>
-    <button class="btn btn-primary" id="addMoreBtn" onclick="addMoreDestinations()" style="margin-top:0.8rem">
-      ➕ Proponi altre mete
-    </button>
   </div>
 
   <!-- ─ FORM PROPOSTA ─ -->
@@ -115,6 +112,16 @@
 </div><!-- /container -->
 
 <div class="toast" id="toast"></div>
+<div id="psyModal" class="psy-modal hidden">
+  <div class="psy-modal-card card">
+    <div class="section-title" style="margin-bottom:0.8rem;">VUTU UN FIA DE PASTA ?!</div>
+    <p class="muted" style="margin-bottom:1.4rem;">In questo tema pazzo non è possibile aggiungere nuove mete. Scegli una risposta per continuare.</p>
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem;">
+      <button class="btn btn-primary" onclick="closePsyModal('yes')">SI</button>
+      <button class="btn btn-orange" onclick="closePsyModal('yesBut')">SI ma</button>
+    </div>
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script>
@@ -231,6 +238,7 @@ function showAllDestinations() {
 /* ── Torna al form di proposta ── */
 function showForm() {
   document.getElementById('formSection').classList.remove('hidden');
+  document.getElementById('alreadySubmitted').classList.add('hidden');
   document.getElementById('allDestinationsCard').classList.remove('hidden');
   document.getElementById('showAllBtn').classList.remove('hidden');
   document.getElementById('showFormBtn').classList.add('hidden');
@@ -238,6 +246,11 @@ function showForm() {
 
 /* ── Aggiungi una destinazione alla lista temporanea ── */
 function addDestination() {
+  if (document.body.classList.contains('psychedelic')) {
+    showPsyModal();
+    return;
+  }
+
   const city = document.getElementById('newCity').value.trim();
   const period = document.getElementById('newPeriod').value;
   const notes = document.getElementById('newNotes').value.trim();
@@ -255,6 +268,22 @@ function addDestination() {
   
   renderUserDestinations();
   toast('✅ Meta aggiunta!', 'ok');
+}
+
+function showPsyModal() {
+  const modal = document.getElementById('psyModal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+}
+
+function closePsyModal(choice) {
+  const modal = document.getElementById('psyModal');
+  if (modal) modal.classList.add('hidden');
+  if (choice === 'yes') {
+    toast('✅ SI! Torna al tema classico per inserire.', 'ok');
+  } else {
+    toast('🟠 SI ma... rimani in meme mode.', 'info');
+  }
 }
 
 /* ── Rimuovi una destinazione dalla lista ── */
@@ -375,6 +404,8 @@ async function submitProposal() {
     setTimeout(() => {
       document.getElementById('formSection').classList.add('hidden');
       document.getElementById('alreadySubmitted').classList.remove('hidden');
+      document.getElementById('showAllBtn').classList.add('hidden');
+      document.getElementById('showFormBtn').classList.remove('hidden');
       loadAllDestinations();
     }, 1200);
 
