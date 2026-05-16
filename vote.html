@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIONAAAAA's TRIP — Vota!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-badge">
+    <span>🗳️</span> Vota la tua meta preferita
+  </div>
+  <h1>FIONAAAAA's<br>TRIP</h1>
+  <p class="subtitle">Chi vincerà? Decidi tu! ✨</p>
+</header>
+
+<div class="container">
+
+  <div class="top-nav">
+    <a href="index.html" class="btn btn-ghost">← Proponi</a>
+  </div>
+
+  <!-- ─ SCHERMATA CARICAMENTO ─ -->
+  <div id="loadingState" class="card" style="text-align:center; padding:2.5rem">
+    <div class="spinner" style="width:36px;height:36px;border-width:3.5px;margin:0 auto 1rem"></div>
+    <p class="muted">Caricamento mete in corso…</p>
+  </div>
+
+  <!-- ─ SCHERMATA GIÀ VOTATO ─ -->
+  <div id="alreadyVoted" class="card card-success hidden fade-in">
+    <div style="font-size:3rem; margin-bottom:0.8rem">✅</div>
+    <div class="section-title">Hai già votato!</div>
+    <p class="muted" style="font-size:0.9rem">
+      Il tuo voto è registrato. Aspetta che tutti gli altri votino per scoprire la meta vincitrice! 👀
+    </p>
+  </div>
+
+  <!-- ─ SEZIONE NESSUNA PROPOSTA ─ -->
+  <div id="noProposals" class="card hidden fade-in" style="text-align:center; padding:2.5rem">
+    <div class="big-emoji" style="font-size:3rem; margin-bottom:1rem">😴</div>
+    <div class="section-title">Nessuna proposta ancora</div>
+    <p class="muted" style="font-size:0.9rem; margin-bottom:1.4rem">Prima devono essere inserite le mete.</p>
+    <a href="index.html" class="btn btn-primary">← Vai a proporre</a>
+  </div>
+
+  <!-- ─ SEZIONE VOTO ─ -->
+  <div id="voteSection" class="hidden">
+
+    <!-- Nome votante -->
+    <div class="card fade-in">
+      <div class="section-label">Identità</div>
+      <div class="section-title">👤 Il tuo nome</div>
+      <input type="text" id="voterName" placeholder="Il tuo nome…" maxlength="30" autocomplete="off">
+    </div>
+
+    <!-- Selezione mete -->
+    <div class="card fade-in" style="animation-delay:0.06s">
+      <div class="section-label">Sistema di voto</div>
+      <div class="section-title">🗳️ Scegli le tue 3 preferite</div>
+      <p class="muted" style="font-size:0.85rem; margin-bottom:1.4rem">
+        Clicca le mete in ordine: la <strong style="color:var(--yellow)">1ª scelta vale 3 punti</strong>, la <strong style="color:var(--pink)">2ª vale 2 punti</strong>, la <strong style="color:var(--purple)">3ª vale 1 punto</strong>. Clicca di nuovo per deselezionare.
+      </p>
+
+      <!-- Slot riepilogo -->
+      <div class="slots-row">
+        <div class="slot slot-1">
+          <div class="slot-label">1ª (3 pt)</div>
+          <div class="slot-value" id="slot1">—</div>
+        </div>
+        <div class="slot slot-2">
+          <div class="slot-label">2ª (2 pt)</div>
+          <div class="slot-value" id="slot2">—</div>
+        </div>
+        <div class="slot slot-3">
+          <div class="slot-label">3ª (1 pt)</div>
+          <div class="slot-value" id="slot3">—</div>
+        </div>
+      </div>
+
+      <!-- Lista mete -->
+      <div id="destList"></div>
+    </div>
+
+    <button class="btn btn-primary btn-full" id="submitVoteBtn" onclick="submitVote()">
+      🗳️ Invia il mio voto
+    </button>
+
+  </div><!-- /voteSection -->
+
+  <!-- ─ PROGRESSO ─ -->
+  <div class="card hidden fade-in" id="progressCard" style="margin-top:1.4rem">
+    <div class="section-label">Stato votazioni</div>
+    <div class="section-title">📊 Progresso</div>
+    <p class="muted" style="font-size:0.88rem" id="progressText">Caricamento…</p>
+    <div class="progress-outer">
+      <div class="progress-inner" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="chip-list" id="votersList"></div>
+    <div id="waitMsg" class="mt-md muted" style="font-size:0.82rem; font-style:italic"></div>
+  </div>
+
+  <!-- ─ RISULTATI (visibili solo quando tutti hanno votato) ─ -->
+  <div class="card card-winner hidden fade-in" id="resultsCard" style="margin-top:1.4rem">
+    <div style="text-align:center; margin-bottom:1.5rem">
+      <div style="font-size:2.5rem; margin-bottom:0.5rem">🏆</div>
+      <div class="section-title" style="font-size:1.5rem; margin-bottom:0.2rem">Risultati finali!</div>
+      <p class="muted" style="font-size:0.88rem">Tutti hanno votato. Ecco dove andiamo! 🎉</p>
+    </div>
+    <div id="resultsList"></div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+let allData = null;
+let allDests = [];   // { city, period, proposedBy[], notes[] }
+let selections = []; // city names in order (index = rank - 1)
+
+/* ── API helpers ── */
+async function apiFetch() {
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
+    headers: { 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY }
+  });
+  if (!r.ok) throw new Error('Errore API');
+  return (await r.json()).record;
+}
+
+async function apiSave(data) {
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY },
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error('Errore salvataggio');
+}
+
+/* ── Toast ── */
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+/* ── Costruisce lista mete deduplicate ── */
+function buildDests(proposals) {
+  const map = {};
+  proposals.forEach(p => {
+    p.destinations.forEach(d => {
+      const key = d.city.trim().toLowerCase();
+      if (!map[key]) {
+        map[key] = {
+          city: d.city.trim(),
+          period: d.period,
+          proposedBy: [p.author],
+          notes: d.notes ? [{ author: p.author, text: d.notes }] : [],
+          _periods: [d.period]
+        };
+      } else {
+        if (!map[key].proposedBy.includes(p.author)) map[key].proposedBy.push(p.author);
+        if (d.notes) map[key].notes.push({ author: p.author, text: d.notes });
+        map[key]._periods.push(d.period);
+        // Periodo più comune
+        const cnt = {};
+        map[key]._periods.forEach(per => cnt[per] = (cnt[per] || 0) + 1);
+        map[key].period = Object.entries(cnt).sort((a,b) => b[1]-a[1])[0][0];
+      }
+    });
+  });
+  return Object.values(map);
+}
+
+/* ── Render lista mete cliccabili ── */
+function renderDests() {
+  const container = document.getElementById('destList');
+  container.innerHTML = allDests.map(d => {
+    const rank = selections.indexOf(d.city) + 1; // 0 = non selezionato
+    const selClass = rank > 0 ? `sel-${rank}` : '';
+    const pts = rank === 1 ? '3 pt' : rank === 2 ? '2 pt' : rank === 3 ? '1 pt' : '';
+    const badgeContent = rank > 0 ? rank : '';
+
+    const notesHtml = d.notes.length
+      ? d.notes.map(n => `<div class="vote-card-notes">"${n.text}" — ${n.author}</div>`).join('')
+      : '';
+
+    return `
+      <div class="vote-card ${selClass}" onclick="toggleSel('${d.city.replace(/'/g, "\\'")}')">
+        <div class="vote-badge">${badgeContent}</div>
+        <div style="flex:1; min-width:0">
+          <div class="vote-card-city">${d.city}</div>
+          <div class="vote-card-meta">📅 ${d.period} &nbsp;·&nbsp; 👤 ${d.proposedBy.join(', ')}</div>
+          ${notesHtml}
+        </div>
+        ${rank ? `<div class="pts-badge">${pts}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  // Aggiorna slot riepilogo
+  ['slot1','slot2','slot3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.textContent = selections[i] || '—';
+    el.classList.toggle('filled', !!selections[i]);
+  });
+}
+
+/* ── Toggle selezione ── */
+function toggleSel(city) {
+  const idx = selections.indexOf(city);
+  if (idx !== -1) {
+    selections.splice(idx, 1);
+  } else if (selections.length < 3) {
+    selections.push(city);
+  } else {
+    toast('⚠️ Già 3 mete scelte! Deseleziona una prima.', 'info');
+    return;
+  }
+  renderDests();
+}
+
+/* ── Render progresso ── */
+function renderProgress(data) {
+  const votes = data.votes || [];
+  const total = CONFIG.TOTAL_VOTERS;
+  const count = votes.length;
+  const pct   = Math.min(100, Math.round(count / total * 100));
+
+  document.getElementById('progressCard').classList.remove('hidden');
+  document.getElementById('progressText').textContent = `${count} di ${total} persone hanno votato`;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('votersList').innerHTML = votes
+    .map(v => `<span class="chip chip-voted">✓ ${v.voter}</span>`)
+    .join('');
+
+  // Persone mancanti
+  const missing = total - count;
+  document.getElementById('waitMsg').textContent =
+    missing > 0
+      ? `⏳ Mancano ancora ${missing} vot${missing === 1 ? 'o' : 'i'} per vedere i risultati…`
+      : '';
+
+  if (count >= total) {
+    renderResults(data);
+    document.getElementById('resultsCard').classList.remove('hidden');
+  }
+}
+
+/* ── Render risultati ── */
+function renderResults(data) {
+  const scores = {};
+  allDests.forEach(d => { scores[d.city] = 0; });
+
+  (data.votes || []).forEach(v => {
+    if (v.choices[0]) scores[v.choices[0]] = (scores[v.choices[0]] || 0) + 3;
+    if (v.choices[1]) scores[v.choices[1]] = (scores[v.choices[1]] || 0) + 2;
+    if (v.choices[2]) scores[v.choices[2]] = (scores[v.choices[2]] || 0) + 1;
+  });
+
+  const sorted = Object.entries(scores)
+    .sort((a,b) => b[1] - a[1])
+    .filter(([, s]) => s > 0);
+
+  const medals  = ['🥇','🥈','🥉'];
+  const classes = ['gold','silver','bronze'];
+
+  document.getElementById('resultsList').innerHTML = sorted.map(([city, score], i) => {
+    const dest   = allDests.find(d => d.city === city);
+    const period = dest?.period || '';
+    return `
+      <div class="result-row ${classes[i] || ''}">
+        <div class="result-medal">${medals[i] || `${i+1}°`}</div>
+        <div style="flex:1">
+          <div class="result-city">${city}</div>
+          <div class="result-period">📅 ${period}</div>
+        </div>
+        <div class="result-score">${score} pt</div>
+      </div>`;
+  }).join('');
+}
+
+/* ── Submit voto ── */
+async function submitVote() {
+  const name = document.getElementById('voterName').value.trim();
+  if (!name)             return toast('⚠️ Inserisci il tuo nome!', 'err');
+  if (selections.length < 3) return toast(`⚠️ Seleziona 3 mete! Ne hai scelte ${selections.length}.`, 'err');
+
+  const btn = document.getElementById('submitVoteBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Invio voto…';
+
+  try {
+    const data = await apiFetch();
+    if (!data.votes) data.votes = [];
+
+    // Controlla duplicato lato server
+    if (data.votes.some(v => v.voter.toLowerCase() === name.toLowerCase())) {
+      toast('⚠️ Hai già votato con questo nome!', 'err');
+      btn.disabled = false;
+      btn.innerHTML = '🗳️ Invia il mio voto';
+      localStorage.setItem('fionaVoted', '1');
+      checkAlreadyVoted();
+      return;
+    }
+
+    data.votes.push({
+      voter: name,
+      timestamp: new Date().toISOString(),
+      choices: [...selections]
+    });
+
+    await apiSave(data);
+    localStorage.setItem('fionaVoted', '1');
+    toast('✅ Voto inviato! Ora aspetta gli altri…', 'ok');
+    allData = data;
+
+    setTimeout(() => {
+      checkAlreadyVoted();
+      renderProgress(allData);
+    }, 1400);
+
+  } catch (e) {
+    console.error(e);
+    toast('❌ Errore nell\'invio. Riprova!', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '🗳️ Invia il mio voto';
+  }
+}
+
+/* ── Controlla se già votato ── */
+function checkAlreadyVoted() {
+  if (localStorage.getItem('fionaVoted')) {
+    document.getElementById('alreadyVoted').classList.remove('hidden');
+    document.getElementById('voteSection').classList.add('hidden');
+    return true;
+  }
+  return false;
+}
+
+/* ── Init ── */
+async function init() {
+  const alreadyVoted = checkAlreadyVoted();
+
+  try {
+    allData = await apiFetch();
+  } catch {
+    document.getElementById('loadingState').innerHTML =
+      '<p class="muted">⚠️ Impossibile connettersi. Controlla config.js.</p>';
+    return;
+  }
+
+  document.getElementById('loadingState').classList.add('hidden');
+
+  if (!allData.proposals?.length) {
+    document.getElementById('noProposals').classList.remove('hidden');
+    renderProgress(allData);
+    return;
+  }
+
+  allDests = buildDests(allData.proposals);
+
+  if (!alreadyVoted) {
+    document.getElementById('voteSection').classList.remove('hidden');
+    renderDests();
+  }
+
+  renderProgress(allData);
+}
+
+init();
+</script>
+</body>
+</html>

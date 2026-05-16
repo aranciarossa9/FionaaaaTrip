@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIONAAAAA's TRIP — Proponi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-badge">
+    <span>✈️</span> Ottobre / Novembre 2025
+  </div>
+  <h1>FIONAAAAA's<br>TRIP</h1>
+  <p class="subtitle">Proponi le 3 mete del tuo cuore 🗺️</p>
+</header>
+
+<div class="container">
+
+  <div class="top-nav">
+    <a href="vote.html" class="btn btn-ghost">🗳️ Vai al voto</a>
+  </div>
+
+  <!-- ─ SCHERMATA GIÀ INVIATO ─ -->
+  <div id="alreadySubmitted" class="card card-success hidden fade-in">
+    <div style="font-size:3rem; margin-bottom:0.8rem">🎉</div>
+    <div class="section-title">Proposte inviate!</div>
+    <p class="muted" style="font-size:0.9rem; margin-bottom:1.4rem">
+      Le tue 3 mete sono state salvate. Ora vai a votare!
+    </p>
+    <a href="vote.html" class="btn btn-primary">🗳️ Vai al voto</a>
+  </div>
+
+  <!-- ─ FORM PROPOSTA ─ -->
+  <div id="formSection">
+
+    <div class="card fade-in">
+      <div class="section-label">Chi sei?</div>
+      <div class="section-title">👤 Il tuo nome</div>
+      <div class="form-group mb-0">
+        <input type="text" id="authorName" placeholder="Es. Marco, Giuls, Simo…" maxlength="30" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="card fade-in" style="animation-delay:0.06s">
+      <div class="section-label">Le tue proposte</div>
+      <div class="section-title">📍 Le 3 mete</div>
+      <p class="muted" style="font-size:0.85rem; margin-bottom:1.4rem">
+        Proponi in ordine di preferenza: la prima vale <strong style="color:var(--yellow)">3 punti</strong>, la seconda <strong style="color:var(--pink)">2 punti</strong>, la terza <strong style="color:var(--purple)">1 punto</strong>.
+      </p>
+
+      <!-- Meta 1 -->
+      <div class="dest-block">
+        <div class="rank-pill rank-1">🥇 1ª meta &mdash; 3 punti</div>
+        <div class="form-group">
+          <label>Città / Destinazione</label>
+          <input type="text" id="city1" placeholder="es. Barcellona, Lisbona, Praga…" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Periodo preferito</label>
+          <select id="period1">
+            <option value="">Seleziona periodo…</option>
+            <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
+            <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
+            <option value="Fine ottobre (21–31 ott)">Fine ottobre (21–31 ott)</option>
+            <option value="Inizio novembre (1–10 nov)">Inizio novembre (1–10 nov)</option>
+            <option value="Metà novembre (11–20 nov)">Metà novembre (11–20 nov)</option>
+            <option value="Fine novembre (21–30 nov)">Fine novembre (21–30 nov)</option>
+            <option value="Flessibile ottobre/novembre">Flessibile ottobre/novembre</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label>Perché ci vuoi andare? Convicici!</label>
+          <textarea id="notes1" rows="2" placeholder="Clima perfetto, vita notturna assurda, voli a 30€…"></textarea>
+        </div>
+      </div>
+
+      <!-- Meta 2 -->
+      <div class="dest-block">
+        <div class="rank-pill rank-2">🥈 2ª meta &mdash; 2 punti</div>
+        <div class="form-group">
+          <label>Città / Destinazione</label>
+          <input type="text" id="city2" placeholder="es. Amsterdam, Berlino, Istanbul…" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Periodo preferito</label>
+          <select id="period2">
+            <option value="">Seleziona periodo…</option>
+            <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
+            <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
+            <option value="Fine ottobre (21–31 ott)">Fine ottobre (21–31 ott)</option>
+            <option value="Inizio novembre (1–10 nov)">Inizio novembre (1–10 nov)</option>
+            <option value="Metà novembre (11–20 nov)">Metà novembre (11–20 nov)</option>
+            <option value="Fine novembre (21–30 nov)">Fine novembre (21–30 nov)</option>
+            <option value="Flessibile ottobre/novembre">Flessibile ottobre/novembre</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label>Perché ci vuoi andare?</label>
+          <textarea id="notes2" rows="2" placeholder="Convincici ancora…"></textarea>
+        </div>
+      </div>
+
+      <!-- Meta 3 -->
+      <div class="dest-block">
+        <div class="rank-pill rank-3">🥉 3ª meta &mdash; 1 punto</div>
+        <div class="form-group">
+          <label>Città / Destinazione</label>
+          <input type="text" id="city3" placeholder="es. Vienna, Porto, Dubrovnik…" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Periodo preferito</label>
+          <select id="period3">
+            <option value="">Seleziona periodo…</option>
+            <option value="Inizio ottobre (1–10 ott)">Inizio ottobre (1–10 ott)</option>
+            <option value="Metà ottobre (11–20 ott)">Metà ottobre (11–20 ott)</option>
+            <option value="Fine ottobre (21–31 ott)">Fine ottobre (21–31 ott)</option>
+            <option value="Inizio novembre (1–10 nov)">Inizio novembre (1–10 nov)</option>
+            <option value="Metà novembre (11–20 nov)">Metà novembre (11–20 nov)</option>
+            <option value="Fine novembre (21–30 nov)">Fine novembre (21–30 nov)</option>
+            <option value="Flessibile ottobre/novembre">Flessibile ottobre/novembre</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label>Perché ci vuoi andare?</label>
+          <textarea id="notes3" rows="2" placeholder="Ultima chance, convinci il gruppo!"></textarea>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="submitBtn" onclick="submitProposal()">
+        🚀 Invia le mie proposte
+      </button>
+    </div>
+
+    <!-- Chi ha già proposto -->
+    <div class="card fade-in" id="submittedCard" style="animation-delay:0.12s">
+      <div class="section-label">Progressi</div>
+      <div class="section-title">👥 Chi ha già proposto</div>
+      <div id="submittedList" class="chip-list">
+        <span class="spinner"></span>
+      </div>
+    </div>
+
+  </div><!-- /formSection -->
+
+</div><!-- /container -->
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+/* ── API helpers ── */
+async function apiFetch() {
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
+    headers: { 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY }
+  });
+  if (!r.ok) throw new Error('Errore caricamento dati');
+  return (await r.json()).record;
+}
+
+async function apiSave(data) {
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY },
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error('Errore salvataggio');
+}
+
+/* ── Toast ── */
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+/* ── Controlla se già inviato (localStorage) ── */
+function checkAlreadySubmitted() {
+  if (localStorage.getItem('fionaProposed')) {
+    document.getElementById('alreadySubmitted').classList.remove('hidden');
+    document.getElementById('formSection').classList.add('hidden');
+    return true;
+  }
+  return false;
+}
+
+/* ── Carica lista di chi ha già proposto ── */
+async function loadSubmitters() {
+  try {
+    const data = await apiFetch();
+    const list = document.getElementById('submittedList');
+    if (!data.proposals?.length) {
+      list.innerHTML = '<span class="muted" style="font-size:0.85rem">Nessuno ancora… sii il primo! 🙌</span>';
+      return;
+    }
+    list.innerHTML = data.proposals
+      .map(p => `<span class="chip chip-done">✓ ${p.author}</span>`)
+      .join('');
+  } catch {
+    document.getElementById('submittedList').innerHTML =
+      '<span class="muted" style="font-size:0.82rem">⚠️ Impossibile caricare. Controlla la connessione.</span>';
+  }
+}
+
+/* ── Submit proposta ── */
+async function submitProposal() {
+  const name  = document.getElementById('authorName').value.trim();
+  const city1 = document.getElementById('city1').value.trim();
+  const per1  = document.getElementById('period1').value;
+  const not1  = document.getElementById('notes1').value.trim();
+  const city2 = document.getElementById('city2').value.trim();
+  const per2  = document.getElementById('period2').value;
+  const not2  = document.getElementById('notes2').value.trim();
+  const city3 = document.getElementById('city3').value.trim();
+  const per3  = document.getElementById('period3').value;
+  const not3  = document.getElementById('notes3').value.trim();
+
+  if (!name)           return toast('⚠️ Inserisci il tuo nome!', 'err');
+  if (!city1 || !per1) return toast('⚠️ Completa la 1ª meta (città + periodo)!', 'err');
+  if (!city2 || !per2) return toast('⚠️ Completa la 2ª meta (città + periodo)!', 'err');
+  if (!city3 || !per3) return toast('⚠️ Completa la 3ª meta (città + periodo)!', 'err');
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Salvataggio…';
+
+  try {
+    const data = await apiFetch();
+    if (!data.proposals) data.proposals = [];
+    if (!data.votes)     data.votes     = [];
+
+    // Controlla nome duplicato lato server
+    if (data.proposals.some(p => p.author.toLowerCase() === name.toLowerCase())) {
+      toast('⚠️ Qualcuno con questo nome ha già proposto!', 'err');
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Invia le mie proposte';
+      localStorage.setItem('fionaProposed', '1');
+      checkAlreadySubmitted();
+      return;
+    }
+
+    data.proposals.push({
+      author: name,
+      timestamp: new Date().toISOString(),
+      destinations: [
+        { city: city1, period: per1, notes: not1 },
+        { city: city2, period: per2, notes: not2 },
+        { city: city3, period: per3, notes: not3 }
+      ]
+    });
+
+    await apiSave(data);
+    localStorage.setItem('fionaProposed', '1');
+    toast('✅ Proposte inviate! Ora vai a votare!', 'ok');
+
+    setTimeout(() => {
+      document.getElementById('formSection').classList.add('hidden');
+      document.getElementById('alreadySubmitted').classList.remove('hidden');
+    }, 1200);
+
+  } catch (e) {
+    console.error(e);
+    toast('❌ Errore nel salvataggio. Riprova tra qualche secondo.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '🚀 Invia le mie proposte';
+  }
+}
+
+/* ── Init ── */
+if (!checkAlreadySubmitted()) {
+  loadSubmitters();
+}
+</script>
+</body>
+</html>
