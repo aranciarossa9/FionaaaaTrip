@@ -602,8 +602,17 @@ select option { background: #1a1a2e; color: var(--text); }
   body.psychedelic .section-title {
     animation: none !important;
   }
+  /* On mobile we hide the extra pill (::after) so the main subtitle gradient is visible and animates */
   body.psychedelic .subtitle::after {
-    animation: none !important;
+    display: none !important;
+  }
+
+  /* Ensure the main subtitle keeps its gradient animation on mobile */
+  body.psychedelic .subtitle {
+    animation: psySubtitleGlow 3.6s ease-in-out infinite !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
   }
   body.psychedelic .btn:hover {
     transform: none !important;
