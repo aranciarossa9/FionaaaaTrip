@@ -237,6 +237,22 @@ function showAllDestinations() {
 
 /* ── Torna al form di proposta ── */
 function showForm() {
+  // Pulisci localStorage per permettere di reinserire
+  localStorage.removeItem('fionaProposed');
+  
+  // Resetta lista temporanea mete
+  userDestinations = [];
+  
+  // Resetta campi del form
+  document.getElementById('authorName').value = '';
+  document.getElementById('newCity').value = '';
+  document.getElementById('newPeriod').value = '';
+  document.getElementById('newNotes').value = '';
+  
+  // Nascondi lista mete aggiunte
+  document.getElementById('userDestinationsContainer').style.display = 'none';
+  
+  // Mostra form e nascondi successocard
   document.getElementById('formSection').classList.remove('hidden');
   document.getElementById('alreadySubmitted').classList.add('hidden');
   document.getElementById('allDestinationsCard').classList.remove('hidden');
