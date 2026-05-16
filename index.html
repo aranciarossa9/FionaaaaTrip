@@ -140,30 +140,40 @@ function formatCountdown(ms) {
 
 function updateVotingCountdown() {
   const countdownCard = document.getElementById('countdownCard');
-  const countdownText = document.getElementById('countdownText');
-  const countdownMessage = document.getElementById('countdownMessage');
-  if (!countdownCard || !countdownText || !countdownMessage || !window.CONFIG || !CONFIG.VOTING_START_DATE) {
-    if (countdownCard) countdownCard.style.display = 'none';
+  if (!countdownCard) return;
+  
+  // Aspetta che CONFIG sia disponibile
+  if (typeof CONFIG === 'undefined' || !CONFIG.VOTING_START_DATE) {
+    console.warn('CONFIG non disponibile ancora');
     return;
   }
+
+  const countdownText = document.getElementById('countdownText');
+  const countdownMessage = document.getElementById('countdownMessage');
+  
+  if (!countdownText || !countdownMessage) return;
 
   const startDate = new Date(CONFIG.VOTING_START_DATE);
   const now = new Date();
   const remaining = startDate - now;
 
+  // Mostra sempre il countdown card
+  countdownCard.style.display = 'block';
+  
   if (remaining > 0) {
-    countdownCard.style.display = 'block';
     countdownText.textContent = formatCountdown(remaining);
     countdownMessage.textContent = `Le votazioni apriranno il ${startDate.toLocaleString('it-IT', { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' })}.`;
   } else {
-    countdownCard.style.display = 'block';
     countdownText.textContent = 'Votazioni aperte!';
     countdownMessage.textContent = 'Vai alla pagina di voto per partecipare ora.';
   }
 }
 
-setInterval(updateVotingCountdown, 1000);
-updateVotingCountdown();
+// Attendi che config.js sia caricato, poi inizia il countdown
+setTimeout(() => {
+  updateVotingCountdown();
+  setInterval(updateVotingCountdown, 1000);
+}, 500);
 
 /* ── THEME (classico / psichedelico) ── */
 function applyTheme(t) {
