@@ -678,6 +678,9 @@ body.psychedelic .section-title {
   -webkit-text-fill-color:transparent;
 }
 
+body.psychedelic .muted { color: rgba(0,0,0,0.55); }
+body.psychedelic .dimmed { color: rgba(0,0,0,0.45); }
+
 body.psychedelic .btn-ghost { background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); color:#070707; border: 1px solid rgba(0,0,0,0.08); }
 body.psychedelic .btn-primary { background: linear-gradient(45deg,#00e5ff,#7C5CFC,#FFD60A); color:#070707; box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
 
@@ -713,7 +716,7 @@ body.psychedelic .header h1 {
   position: relative;
   display: inline-block;
   transform: skewX(-6deg) rotate(-1deg);
-  animation: wobble 4s ease-in-out infinite !important;
+  animation: titleSpark 4.2s ease-in-out infinite !important;
   color: #ffffff;
   text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35);
   letter-spacing: -1px;
@@ -727,6 +730,16 @@ body.psychedelic .header h1::before {
 }
 body.psychedelic .header h1::after {
   animation: glitchBottom 3s infinite linear !important;
+}
+
+@keyframes titleSpark {
+  0% { transform: skewX(-6deg) rotate(-1deg) scale(1); }
+  15% { transform: skewX(-2deg) rotate(2deg) scale(1.02); }
+  30% { transform: skewX(4deg) rotate(-2deg) scale(1.05) translateY(-2px); }
+  45% { transform: skewX(-5deg) rotate(1deg) scale(1.03); }
+  60% { transform: skewX(3deg) rotate(-1deg) scale(1.06) translateY(-3px); }
+  75% { transform: skewX(-4deg) rotate(2deg) scale(1.02); }
+  100% { transform: skewX(-6deg) rotate(-1deg) scale(1); }
 }
 
 @keyframes wobble {
@@ -796,8 +809,18 @@ body.psychedelic .subtitle {
   position: static;
 }
 body.psychedelic .subtitle::after {
-  content: none;
-  animation: none;
+  content: attr(data-psy);
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  background: rgba(255,255,255,0.95);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  line-height: 1.3;
 }
 
 @keyframes titlePulse {
