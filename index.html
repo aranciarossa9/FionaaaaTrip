@@ -10,7 +10,7 @@
 
 <header class="header">
   <div class="header-badge">
-    <span>✈️</span> Ottobre / Novembre 2025
+    <span>✈️</span> Ottobre / Novembre 2026
   </div>
   <h1 data-text="FIONAAAA's TRIP">FIONAAAA's<br>TRIP</h1>
   <p class="subtitle">Proponi le mete che preferisci🗺️</p>
@@ -193,11 +193,16 @@ setTimeout(() => {
 }, 500);
 
 /* ── THEME (classico / psichedelico) ── */
+const DEFAULT_SUBTITLE = 'Proponi le mete che preferisci🗺️';
+const PSY_SUBTITLE = 'MA CHE TRIIIIIIIIP';
+
 function applyTheme(t) {
   const isPsy = (t === 'psychedelic');
   document.body.classList.toggle('psychedelic', isPsy);
   const label = document.getElementById('themeLabel');
   if (label) label.textContent = isPsy ? 'Pazzo in Culo' : 'Classico';
+  const subtitle = document.querySelector('.subtitle');
+  if (subtitle) subtitle.textContent = isPsy ? PSY_SUBTITLE : DEFAULT_SUBTITLE;
   if (isPsy) startPsyPhraseCycle(); else stopPsyPhraseCycle();
   try { localStorage.setItem('theme', t); } catch (e) { /* ignore */ }
 }
@@ -385,13 +390,22 @@ function closePsyModal(choice) {
 
 /* ── Intercetta input nel tema pazzo ── */
 function setupPsychedelicInputGuards() {
-  const inputs = document.querySelectorAll('#authorName, #newCity, #newPeriod, #newNotes');
-  inputs.forEach(input => {
-    input.addEventListener('focus', () => {
-      if (document.body.classList.contains('psychedelic')) {
-        showPsyModal();
-      }
-    });
+  document.addEventListener('pointerdown', event => {
+    if (!document.body.classList.contains('psychedelic')) return;
+    const target = event.target;
+    if (target && target.matches && target.matches('input, textarea, select')) {
+      event.preventDefault();
+      event.stopPropagation();
+      showPsyModal();
+    }
+  }, { capture: true });
+
+  document.addEventListener('focusin', event => {
+    if (!document.body.classList.contains('psychedelic')) return;
+    const target = event.target;
+    if (target && target.matches && target.matches('input, textarea, select')) {
+      showPsyModal();
+    }
   });
 }
 
