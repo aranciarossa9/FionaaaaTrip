@@ -29,6 +29,7 @@
     <div class="section-title">⏳ Mancano</div>
     <p id="countdownText" class="muted" style="font-size:1.1rem; margin-bottom:0.5rem;"></p>
     <p id="countdownMessage" class="muted" style="font-size:0.9rem; margin-bottom:0;">Le votazioni partiranno automaticamente quando il timer arriva a zero.</p>
+    <button id="voteNowBtn" class="btn btn-primary btn-full hidden" style="margin-top:1rem;">🗳️ Vota !</button>
   </div>
 
   <!-- ─ SCHERMATA GIÀ INVIATO ─ -->
@@ -128,6 +129,13 @@
 /* ── STATO GLOBALE ── */
 let userDestinations = [];
 
+function generateUniqueId() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'dest-' + Math.random().toString(36).slice(2, 10) + '-' + Date.now().toString(36);
+}
+
 function formatCountdown(ms) {
   if (ms < 0) return null;
   const totalSeconds = Math.floor(ms / 1000);
@@ -166,6 +174,15 @@ function updateVotingCountdown() {
   } else {
     countdownText.textContent = 'Votazioni aperte!';
     countdownMessage.textContent = 'Vai alla pagina di voto per partecipare ora.';
+    const voteBtn = document.getElementById('voteNowBtn');
+    if (voteBtn) {
+      voteBtn.classList.remove('hidden');
+      voteBtn.onclick = () => window.location.href = 'vote.html';
+    }
+  }
+  if (remaining > 0) {
+    const voteBtn = document.getElementById('voteNowBtn');
+    if (voteBtn) voteBtn.classList.add('hidden');
   }
 }
 
@@ -207,14 +224,18 @@ const PSY_PHRASES = [
 let psyPhraseIndex = 0;
 let psyPhraseTimer = null;
 
+const PSY_COLORS = ['#FF4D94', '#7C5CFC', '#00E5FF', '#FFD60A', '#39D98A', '#FF8B00'];
+
 function updatePsyPhraseElement() {
   const subtitle = document.querySelector('.subtitle');
   if (!subtitle) return;
   if (!document.body.classList.contains('psychedelic')) {
     subtitle.removeAttribute('data-psy');
+    subtitle.style.removeProperty('--psy-color');
     return;
   }
   subtitle.dataset.psy = PSY_PHRASES[psyPhraseIndex];
+  subtitle.style.setProperty('--psy-color', PSY_COLORS[psyPhraseIndex % PSY_COLORS.length]);
 }
 
 function startPsyPhraseCycle() {
@@ -329,7 +350,13 @@ function addDestination() {
     return toast('⚠️ Completa Destinazione e Periodo!', 'err');
   }
 
-  userDestinations.push({ city, period, notes });
+  userDestinations.push({
+    id: generateUniqueId(),
+    city,
+    period,
+    notes,
+    comments: []
+  });
   
   // Pulisci form
   document.getElementById('newCity').value = '';
@@ -413,11 +440,16 @@ async function loadAllDestinations() {
     
     // Raccogli tutte le mete di tutti
     let allDests = [];
-    data.proposals.forEach(proposal => {
-      proposal.destinations.forEach(dest => {
+    data.proposals.forEach((proposal, proposalIndex) => {
+      proposal.destinations.forEach((dest, destIndex) => {
+        if (!dest.id) dest.id = generateUniqueId();
+        dest.comments = Array.isArray(dest.comments) ? dest.comments : [];
+
         allDests.push({
           ...dest,
-          author: proposal.author
+          author: proposal.author,
+          proposalIndex,
+          destIndex
         });
       });
     });
@@ -437,12 +469,52 @@ async function loadAllDestinations() {
         </div>
         <div style="font-size:0.85rem; color:var(--muted); margin-bottom:0.4rem;">📅 ${dest.period}</div>
         ${dest.notes ? `<div style="font-size:0.85rem; color:var(--dimmed); font-style:italic; padding:0.6rem; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid var(--cyan);">${dest.notes}</div>` : ''}
+        ${dest.comments && dest.comments.length ? `<div style="margin-top:0.8rem; padding:0.75rem; background:rgba(255,255,255,0.06); border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+            ${dest.comments.map(c => `<div style="font-size:0.83rem; color:var(--dimmed); margin-bottom:0.5rem;">💬 <strong>${c.author || 'Anonimo'}:</strong> ${c.text}</div>`).join('')}
+          </div>` : ''}
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:flex-end; margin-top:0.85rem;">
+          <input id="commentInput_${dest.id}" type="text" placeholder="Aggiungi una nota a questa destinazione…" style="flex:1; min-width:180px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.85rem 1rem; color:var(--text);" />
+          <button class="btn btn-ghost" onclick="submitDestinationComment(${dest.proposalIndex}, ${dest.destIndex}, ${JSON.stringify(dest.id)})">✍️ Commenta</button>
+        </div>
       </div>
     `).join('');
   } catch (e) {
     console.error(e);
     document.getElementById('allDestinationsList').innerHTML =
       '<span class="muted" style="font-size:0.82rem">⚠️ Errore nel caricamento. Controlla la connessione.</span>';
+  }
+}
+
+async function submitDestinationComment(proposalIndex, destIndex, destId) {
+  const input = document.getElementById(`commentInput_${destId}`);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return toast('⚠️ Scrivi prima la nota!', 'err');
+
+  const author = document.getElementById('authorName')?.value.trim() || 'Anonimo';
+
+  try {
+    const data = await apiFetch();
+    const proposal = data.proposals?.[proposalIndex];
+    if (!proposal) throw new Error('Proposta non trovata');
+    const destination = proposal.destinations?.[destIndex];
+    if (!destination) throw new Error('Destinazione non trovata');
+
+    destination.id = destination.id || generateUniqueId();
+    destination.comments = Array.isArray(destination.comments) ? destination.comments : [];
+    destination.comments.push({
+      author,
+      text,
+      timestamp: new Date().toISOString()
+    });
+
+    await apiSave(data);
+    input.value = '';
+    toast('✅ Nota aggiunta!', 'ok');
+    loadAllDestinations();
+  } catch (error) {
+    console.error(error);
+    toast('❌ Errore durante il salvataggio della nota.', 'err');
   }
 }
 
