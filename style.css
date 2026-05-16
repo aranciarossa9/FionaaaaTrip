@@ -582,14 +582,23 @@ body.psychedelic::after { display:none; }
 body.psychedelic::before { opacity:0.06; }
 
 body.psychedelic .card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
-  border: 2px dashed rgba(255,255,255,0.25);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 40px rgba(124,92,252,0.08) inset;
+  background: rgba(255,255,255,0.94);
+  color: #0a0a12;
+  border: 2px dashed rgba(255,255,255,0.45);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 40px rgba(124,92,252,0.12) inset;
   transform: perspective(600px) rotateX(2deg);
+}
+body.psychedelic .card, body.psychedelic .card * {
+  color: inherit;
 }
 
 body.psychedelic .header-badge { background: linear-gradient(90deg,#ffb3c1,#ffd60a); color:#000; border:none; }
-body.psychedelic .section-title { background: linear-gradient(90deg,#7C5CFC,#FF4D94); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+body.psychedelic .section-title {
+  background: linear-gradient(90deg,#7C5CFC,#FF4D94);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: titlePulse 3.5s ease-in-out infinite;
+}
 
 body.psychedelic .btn-ghost { background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); color:#070707; border: 1px solid rgba(0,0,0,0.08); }
 body.psychedelic .btn-primary { background: linear-gradient(45deg,#00e5ff,#7C5CFC,#FFD60A); color:#070707; box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
@@ -633,6 +642,9 @@ body.psychedelic .header h1 {
   display: inline-block;
   transform: skewX(-6deg) rotate(-1deg);
   animation: wobble 4s ease-in-out infinite;
+  color: #ffffff;
+  text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35);
+  letter-spacing: -1px;
 }
 
 @keyframes wobble {
@@ -650,6 +662,7 @@ body.psychedelic .header h1::after {
   position: absolute; left: 0; top: 0;
   width: 100%; overflow: hidden;
   clip: rect(0,900px,0,0);
+  white-space: pre-line;
 }
 body.psychedelic .header h1::before { left: 2px; text-shadow: -2px 0 #ff4d94; animation: glitchTop 2.5s infinite linear; }
 body.psychedelic .header h1::after  { left: -2px; text-shadow: -2px 0 #00e5ff; animation: glitchBottom 3s infinite linear; }
@@ -698,7 +711,39 @@ body.psychedelic #allDestinationsList > div::before {
 body.psychedelic .btn { transform-origin: center; }
 body.psychedelic .btn:hover { transform: rotate(-3deg) scale(1.06); }
 
-/* Reduce visual clutter but keep chaos readable: compact font-size for lists */
+body.psychedelic .subtitle {
+  color: #070707;
+  text-shadow: 1px 1px 12px rgba(255,255,255,0.9);
+  position: relative;
+}
+body.psychedelic .subtitle::after {
+  content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE";
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #111;
+  background: rgba(255,255,255,0.96);
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  animation: subtitleShift 8s ease-in-out infinite;
+}
+@keyframes subtitleShift {
+  0% { content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE"; transform: translateX(0); }
+  25% { content: "ATTENZIONE: SCHERMO IPNOTICO ATTIVO"; transform: translateX(-6px); }
+  50% { content: "FOLLIA CONTROLLATA? SPESSO NO."; transform: translateX(4px); }
+  75% { content: "NON LEGGERE TROPPO VELOCE"; transform: translateX(-4px); }
+  100% { content: "MIXED MESSAGES • CHAOS È UN'ARTE • LEGGERMENTE IMPOSSIBILE"; transform: translateX(0); }
+}
+
+@keyframes titlePulse {
+  0% { text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35); }
+  50% { text-shadow: 0 0 28px rgba(255,255,255,1), 0 0 48px rgba(255,77,148,0.65); }
+  100% { text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35); }
+}
+
+/* Reduce visual clutter but keep chaos readable: compact cards and subtle separators */
 body.psychedelic #allDestinationsList { font-size: 0.95rem; }
 
 /* Subtle vertical jitter for the whole page */

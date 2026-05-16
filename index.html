@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FIONAAAAA's TRIP — Proponi</title>
+  <title>FIONAAAA's TRIP — Proponi</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
   <div class="header-badge">
     <span>✈️</span> Ottobre / Novembre 2025
   </div>
-  <h1>FIONAAAAA's<br>TRIP</h1>
+  <h1 data-text="FIONAAAA's TRIP">FIONAAAA's<br>TRIP</h1>
   <p class="subtitle">Proponi tutte le mete che vuoi 🗺️</p>
 </header>
 
@@ -119,7 +119,7 @@ function applyTheme(t) {
   const isPsy = (t === 'psychedelic');
   document.body.classList.toggle('psychedelic', isPsy);
   const label = document.getElementById('themeLabel');
-  if (label) label.textContent = isPsy ? 'Pazzo' : 'Classico';
+  if (label) label.textContent = isPsy ? 'Pazzo in Culo' : 'Classico';
   try { localStorage.setItem('theme', t); } catch (e) { /* ignore */ }
 }
 
