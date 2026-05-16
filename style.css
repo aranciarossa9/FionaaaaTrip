@@ -826,9 +826,14 @@ body.psychedelic .btn { transform: none; }
 body.psychedelic .btn:hover { transform: none; }
 
 body.psychedelic .subtitle {
-  color: #070707;
-  text-shadow: none;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(255,255,255,0.4);
   position: static;
+  background: linear-gradient(90deg, #ff4d94, #7C5CFC, #00E5FF, #FFD60A, #39D98A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: psySubtitleGlow 3.6s ease-in-out infinite;
 }
 body.psychedelic .subtitle::after {
   content: attr(data-psy);
@@ -849,6 +854,12 @@ body.psychedelic .subtitle::after {
   0% { text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35); }
   50% { text-shadow: 0 0 28px rgba(255,255,255,1), 0 0 48px rgba(255,77,148,0.65); }
   100% { text-shadow: 0 0 18px rgba(255,255,255,0.9), 0 0 30px rgba(0,0,0,0.35); }
+}
+
+@keyframes psySubtitleGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Reduce visual clutter but keep chaos readable: compact cards and subtle separators */

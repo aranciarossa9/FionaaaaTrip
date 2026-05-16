@@ -390,20 +390,25 @@ function closePsyModal(choice) {
 
 /* ── Intercetta input nel tema pazzo ── */
 function setupPsychedelicInputGuards() {
-  document.addEventListener('pointerdown', event => {
+  const blockPsyInput = event => {
     if (!document.body.classList.contains('psychedelic')) return;
     const target = event.target;
-    if (target && target.matches && target.matches('input, textarea, select')) {
+    const field = target && target.closest && target.closest('input, textarea, select');
+    if (field) {
       event.preventDefault();
       event.stopPropagation();
       showPsyModal();
     }
-  }, { capture: true });
+  };
+
+  document.addEventListener('pointerdown', blockPsyInput, { capture: true });
+  document.addEventListener('touchstart', blockPsyInput, { capture: true });
 
   document.addEventListener('focusin', event => {
     if (!document.body.classList.contains('psychedelic')) return;
     const target = event.target;
     if (target && target.matches && target.matches('input, textarea, select')) {
+      target.blur && target.blur();
       showPsyModal();
     }
   });
