@@ -24,6 +24,13 @@
     <button class="btn btn-ghost" id="themeToggle" onclick="toggleTheme()">🎨 Tema: <span id="themeLabel">Classico</span></button>
   </div>
 
+  <div id="countdownCard" class="card fade-in" style="margin-bottom:1.2rem; display:none;">
+    <div class="section-label">Countdown</div>
+    <div class="section-title">⏳ Mancano</div>
+    <p id="countdownText" class="muted" style="font-size:1.1rem; margin-bottom:0.5rem;"></p>
+    <p id="countdownMessage" class="muted" style="font-size:0.9rem; margin-bottom:0;">Le votazioni partiranno automaticamente quando il timer arriva a zero.</p>
+  </div>
+
   <!-- ─ SCHERMATA GIÀ INVIATO ─ -->
   <div id="alreadySubmitted" class="card card-success hidden fade-in">
     <div style="font-size:3rem; margin-bottom:0.8rem">🎉</div>
@@ -113,6 +120,43 @@
 <script>
 /* ── STATO GLOBALE ── */
 let userDestinations = [];
+
+function formatCountdown(ms) {
+  if (ms < 0) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${days}g ${hours}h ${minutes}m ${seconds}s`;
+}
+
+function updateVotingCountdown() {
+  const countdownCard = document.getElementById('countdownCard');
+  const countdownText = document.getElementById('countdownText');
+  const countdownMessage = document.getElementById('countdownMessage');
+  if (!countdownCard || !countdownText || !countdownMessage || !window.CONFIG || !CONFIG.VOTING_START_DATE) {
+    if (countdownCard) countdownCard.style.display = 'none';
+    return;
+  }
+
+  const startDate = new Date(CONFIG.VOTING_START_DATE);
+  const now = new Date();
+  const remaining = startDate - now;
+
+  if (remaining > 0) {
+    countdownCard.style.display = 'block';
+    countdownText.textContent = formatCountdown(remaining);
+    countdownMessage.textContent = `Le votazioni apriranno il ${startDate.toLocaleString('it-IT', { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' })}.`;
+  } else {
+    countdownCard.style.display = 'block';
+    countdownText.textContent = 'Votazioni aperte!';
+    countdownMessage.textContent = 'Vai alla pagina di voto per partecipare ora.';
+  }
+}
+
+setInterval(updateVotingCountdown, 1000);
+updateVotingCountdown();
 
 /* ── THEME (classico / psichedelico) ── */
 function applyTheme(t) {

@@ -45,6 +45,13 @@
     <a href="index.html" class="btn btn-primary">← Vai a proporre</a>
   </div>
 
+  <div id="votingNotStarted" class="card hidden fade-in" style="text-align:center; padding:2.5rem">
+    <div class="big-emoji" style="font-size:3rem; margin-bottom:1rem">⏳</div>
+    <div class="section-title">Votazioni non ancora aperte</div>
+    <p class="muted" id="votingStartMessage" style="font-size:0.9rem; margin-bottom:1.4rem"></p>
+    <a href="index.html" class="btn btn-primary">← Torna alle proposte</a>
+  </div>
+
   <!-- ─ SEZIONE VOTO ─ -->
   <div id="voteSection" class="hidden">
 
@@ -341,6 +348,22 @@ function checkAlreadyVoted() {
   return false;
 }
 
+/* ── Controlla data di inizio votazioni ── */
+function isVotingStarted() {
+  if (!CONFIG.VOTING_START_DATE) return true;
+  const start = new Date(CONFIG.VOTING_START_DATE);
+  const now = new Date();
+  return now >= start;
+}
+
+function showVotingStartMessage() {
+  const start = new Date(CONFIG.VOTING_START_DATE);
+  const options = { weekday:'long', day:'numeric', month:'long' };
+  const formatted = start.toLocaleDateString('it-IT', options);
+  document.getElementById('votingStartMessage').textContent = `Le votazioni partiranno automaticamente il ${formatted}. Torna qui dopo quella data.`;
+  document.getElementById('votingNotStarted').classList.remove('hidden');
+}
+
 /* ── Init ── */
 async function init() {
   const alreadyVoted = checkAlreadyVoted();
@@ -364,8 +387,12 @@ async function init() {
   allDests = buildDests(allData.proposals);
 
   if (!alreadyVoted) {
-    document.getElementById('voteSection').classList.remove('hidden');
-    renderDests();
+    if (isVotingStarted()) {
+      document.getElementById('voteSection').classList.remove('hidden');
+      renderDests();
+    } else {
+      showVotingStartMessage();
+    }
   }
 
   renderProgress(allData);
