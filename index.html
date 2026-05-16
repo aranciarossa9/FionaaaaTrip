@@ -214,8 +214,8 @@ function toggleTheme() {
 }
 
 function initTheme() {
-  const t = localStorage.getItem('theme') || 'classic';
-  applyTheme(t);
+  // Override locale per far aprire sempre il tema classico al primo accesso
+  applyTheme('classic');
 }
 
 const PSY_PHRASES = [
