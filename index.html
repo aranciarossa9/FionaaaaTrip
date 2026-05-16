@@ -474,7 +474,7 @@ async function loadAllDestinations() {
           </div>` : ''}
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:flex-end; margin-top:0.85rem;">
           <input id="commentInput_${dest.id}" type="text" placeholder="Aggiungi una nota a questa destinazione…" style="flex:1; min-width:180px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.85rem 1rem; color:var(--text);" />
-          <button class="btn btn-ghost" onclick="submitDestinationComment(${dest.proposalIndex}, ${dest.destIndex}, ${JSON.stringify(dest.id)})">✍️ Commenta</button>
+          <button class="btn btn-ghost" onclick='submitDestinationComment(${dest.proposalIndex}, ${dest.destIndex}, ${JSON.stringify(dest.id)})'>✍️ Commenta</button>
         </div>
       </div>
     `).join('');
