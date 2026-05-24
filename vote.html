@@ -127,6 +127,8 @@
 let allData = null;
 let allDests = [];   // { city, period, proposedBy[], notes[] }
 let selections = []; // city names in order (index = rank - 1)
+const VOTED_KEY = 'fionaVoted';
+const VOTER_NAME_KEY = 'fionaVoterName';
 
 /* ── API helpers ── */
 async function apiFetch() {
@@ -309,8 +311,6 @@ async function submitVote() {
       toast('⚠️ Hai già votato con questo nome!', 'err');
       btn.disabled = false;
       btn.innerHTML = '🗳️ Invia il mio voto';
-      localStorage.setItem('fionaVoted', '1');
-      checkAlreadyVoted();
       return;
     }
 
@@ -321,12 +321,13 @@ async function submitVote() {
     });
 
     await apiSave(data);
-    localStorage.setItem('fionaVoted', '1');
+    localStorage.setItem(VOTED_KEY, '1');
+    localStorage.setItem(VOTER_NAME_KEY, name);
     toast('✅ Voto inviato! Ora aspetta gli altri…', 'ok');
     allData = data;
 
     setTimeout(() => {
-      checkAlreadyVoted();
+      checkAlreadyVoted(allData);
       renderProgress(allData);
     }, 1400);
 
@@ -339,16 +340,22 @@ async function submitVote() {
 }
 
 /* ── Controlla se già votato ── */
-function checkAlreadyVoted() {
-  if (localStorage.getItem('fionaVoted')) {
-    document.getElementById('alreadyVoted').classList.remove('hidden');
-    document.getElementById('voteSection').classList.add('hidden');
-    return true;
+function checkAlreadyVoted(data) {
+  const storedVoted = localStorage.getItem(VOTED_KEY);
+  const storedName = localStorage.getItem(VOTER_NAME_KEY);
+
+  if (!storedVoted || !storedName || !data?.votes?.some(v => v.voter.toLowerCase() === storedName.toLowerCase())) {
+    localStorage.removeItem(VOTED_KEY);
+    localStorage.removeItem(VOTER_NAME_KEY);
+    return false;
   }
-  return false;
+
+  document.getElementById('alreadyVoted').classList.remove('hidden');
+  document.getElementById('voteSection').classList.add('hidden');
+  return true;
 }
 
-/* ── Controlla data di inizio votazioni ── */
+/* ── Controlla data di inizio votazioni */
 function isVotingStarted() {
   if (!CONFIG.VOTING_START_DATE) return true;
   const start = new Date(CONFIG.VOTING_START_DATE);
@@ -366,8 +373,6 @@ function showVotingStartMessage() {
 
 /* ── Init ── */
 async function init() {
-  const alreadyVoted = checkAlreadyVoted();
-
   try {
     allData = await apiFetch();
   } catch {
@@ -378,6 +383,12 @@ async function init() {
 
   document.getElementById('loadingState').classList.add('hidden');
 
+  const alreadyVoted = checkAlreadyVoted(allData);
+  if (alreadyVoted) {
+    renderProgress(allData);
+    return;
+  }
+
   if (!allData.proposals?.length) {
     document.getElementById('noProposals').classList.remove('hidden');
     renderProgress(allData);
@@ -386,13 +397,11 @@ async function init() {
 
   allDests = buildDests(allData.proposals);
 
-  if (!alreadyVoted) {
-    if (isVotingStarted()) {
-      document.getElementById('voteSection').classList.remove('hidden');
-      renderDests();
-    } else {
-      showVotingStartMessage();
-    }
+  if (isVotingStarted()) {
+    document.getElementById('voteSection').classList.remove('hidden');
+    renderDests();
+  } else {
+    showVotingStartMessage();
   }
 
   renderProgress(allData);
