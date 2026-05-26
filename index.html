@@ -269,7 +269,7 @@ async function apiFetch() {
 
 async function apiSave(data) {
   const r = await fetch(CONFIG.DATA_URL, {
-    method: 'PUT',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });

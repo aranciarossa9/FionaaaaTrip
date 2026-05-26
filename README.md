@@ -27,32 +27,19 @@ Quando il contatore raggiunge TOTAL_VOTERS, la classifica si svela automaticamen
 
 ## Setup (5 minuti)
 
-### 1. Crea un account su JSONBin
-https://jsonbin.io → Registrati gratis
+### 1. Usa l'endpoint npoint fornito
+Non servono login né API key.
 
-### 2. Crea un Bin
-- Vai su "Bins" → "Create Bin"
-- Inserisci come contenuto iniziale:
-  ```json
-  { "proposals": [], "votes": [] }
-  ```
-- Clicca "Create"
-- Copia il **BIN ID** dalla URL (es. `6650abc123def456`)
-
-### 3. Ottieni la Master Key
-- Vai su "API Keys" nel tuo account
-- Copia la **Master Key** (inizia con `$2a$10$...`)
-
-### 4. Aggiorna config.js
+### 2. Aggiorna config.js
 ```js
 const CONFIG = {
-  JSONBIN_MASTER_KEY: '$2a$10$XXXXXXXXXXXXXXXXXX',  // ← la tua
-  BIN_ID:             '6650XXXXXXXXXXXXXXXX',         // ← il tuo
+  DATA_URL: 'https://api.npoint.io/631ab5e192ef75b1820e',
+  VOTING_START_DATE: '2026-05-24T00:00:00',
   TOTAL_VOTERS: 6,  // ← quante persone voteranno
 };
 ```
 
-### 5. Carica su GitHub Pages
+### 3. Carica su GitHub Pages
 - Crea una repo GitHub pubblica
 - Carica tutti i file (index.html, vote.html, style.css, config.js)
 - Vai su Settings → Pages → Source: main branch
@@ -63,7 +50,7 @@ const CONFIG = {
 ## Struttura file
 
 ```
-├── config.js      → credenziali JSONBin + numero votanti
+├── config.js      → URL npoint + numero votanti
 ├── style.css      → stili condivisi
 ├── index.html     → pagina proposta mete
 └── vote.html      → pagina voto + risultati
@@ -73,7 +60,7 @@ const CONFIG = {
 
 ## Note importanti
 
-- **Sicurezza**: la Master Key è visibile nel codice. Per un sondaggio tra amici è accettabile; non usare per dati sensibili.
-- **Reset**: per ricominciare da zero, apri JSONBin e resetta il bin a `{ "proposals": [], "votes": [] }`.
-- **Doppio voto**: il sistema controlla il nome lato server (JSONBin). Il localStorage aggiunge solo un layer UX locale.
+- **Storage**: l'app ora usa npoint come backend JSON.
+- **Reset**: per ricominciare da zero, apri il bin npoint e resetta i dati a `{ "proposals": [], "votes": [] }`.
+- **Doppio voto**: il sistema controlla il nome lato server. Il localStorage aggiunge solo un layer UX locale.
 - **Race condition**: in caso rarissimo di submit simultaneo da due persone nello stesso istante, un voto potrebbe sovrapporsi. Per un gruppo piccolo è trascurabile.
