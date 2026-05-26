@@ -114,6 +114,7 @@
       <div style="font-size:2.5rem; margin-bottom:0.5rem">🏆</div>
       <div class="section-title" style="font-size:1.5rem; margin-bottom:0.2rem">Risultati finali!</div>
       <p class="muted" style="font-size:0.88rem">Tutti hanno votato. Ecco dove andiamo! 🎉</p>
+      <p id="tieMessage" class="muted hidden" style="font-size:0.88rem; margin-top:0.8rem; font-style:italic;">Pareggio per il primo posto: ci sarà uno spareggio per decidere la meta vincente.</p>
     </div>
     <div id="resultsList"></div>
   </div>
@@ -271,6 +272,17 @@ function renderResults(data) {
   const sorted = Object.entries(scores)
     .sort((a,b) => b[1] - a[1])
     .filter(([, s]) => s > 0);
+
+  const firstScore = sorted[0]?.[1] || 0;
+  const firstTieCount = sorted.filter(([, score]) => score === firstScore).length;
+  const tieMessageEl = document.getElementById('tieMessage');
+  if (tieMessageEl) {
+    if (firstTieCount > 1 && firstScore > 0) {
+      tieMessageEl.classList.remove('hidden');
+    } else {
+      tieMessageEl.classList.add('hidden');
+    }
+  }
 
   const medals  = ['🥇','🥈','🥉'];
   const classes = ['gold','silver','bronze'];
