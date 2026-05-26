@@ -262,17 +262,15 @@ function stopPsyPhraseCycle() {
 
 /* ── API helpers ── */
 async function apiFetch() {
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-    headers: { 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY }
-  });
+  const r = await fetch(CONFIG.DATA_URL);
   if (!r.ok) throw new Error('Errore caricamento dati');
-  return (await r.json()).record;
+  return await r.json();
 }
 
 async function apiSave(data) {
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
+  const r = await fetch(CONFIG.DATA_URL, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.JSONBIN_MASTER_KEY },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
   if (!r.ok) throw new Error('Errore salvataggio');
